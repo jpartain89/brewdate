@@ -3,20 +3,43 @@
 # Single-worded command to - for now as of 3.20.16 at 7:14 am -
 # update, upgrade, cleanup and "doctor" homebrew and brew cask.
 
+# Copyright © 2017 JPCDI, JPartain89 and Justin Partain
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Program information
+PROGRAM_NAME="brewdate"
+PROGRAM_AUTHOR="Justin Partain"
+PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME@jpcdi.com"
+PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
+
+VERSION="2.0"
 USER_HOME="/Users/$(logname)"
 USER_BIN="$USER_HOME/bin"
 
-if [[ ! -e "$USER_BIN/allunix" ]]; then
+if [[ ! -e "$(which allunix)" ]] && [[ ! -e "$USER_BIN/$PROGRAM_NAME" ]]; then
     echo "AllUnix file is missing."
     wget -O - http://bit.ly/jp_allunix | bash
 fi
 
 . "$USER_BIN/allunix"
 
+no_sudo
+
 trap 'exit 0' SIGHUP SIGINT SIGTERM EXIT
 
 brew_var () {
-    echo ""
     echo "${CYAN}Brew Update${NORMAL}"
     echo ""
     /usr/local/bin/brew update;
@@ -67,5 +90,19 @@ This is a simple wrapper script that just auto-runs:
     brew cask doctor
 EOF
 }
+ERROR () {
+    echo "${WARNING}Sorry, either encountered an error or a 'stop' signal.${NORMAL}"
+    echo "${WARNING}Also, only -h, --help, -V, --version, -C and --copyright ${NORMAL}"
+    echo "${WARNING}are the allowed command line flags.${NORMAL}"
+    echo "${WARNING}Now exiting.${NORMAL}"
+}
 
-no_sudo; brew_var
+while [ "$#" -ge 1 ]; do
+    case "$1" in
+        -h | --help ) help_text; exit 0;;
+        -V | --version ) HELP_VERSION; exit 0;;
+        -C | --copyright ) COPYRIGHT; exit 0;;
+        * ) ERROR; exit 1;;
+    esac
+done
+brew_var; EXIT_NORM
