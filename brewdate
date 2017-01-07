@@ -13,35 +13,37 @@ fi
 
 . "$USER_BIN/allunix"
 
+trap 'exit 0' SIGHUP SIGINT SIGTERM EXIT
+
 brew_var () {
     echo ""
     echo "${CYAN}Brew Update${NORMAL}"
     echo ""
-    /usr/local/bin/brew update &&
+    /usr/local/bin/brew update;
     echo ""
     echo "${BROWN}Brew Upgrade${NORMAL}"
     echo ""
-    /usr/local/bin/brew upgrade &&
+    /usr/local/bin/brew upgrade;
     echo ""
     echo "${GRAY}Brew Cleanup${NORMAL}"
     echo ""
-    /usr/local/bin/brew cleanup &&
+    /usr/local/bin/brew cleanup;
     echo ""
     echo "${GREEN}Brew Prune${NORMAL}"
     echo ""
-    /usr/local/bin/brew prune &&
+    /usr/local/bin/brew prune;
     echo ""
     echo "${MAGENTA}Brew Doctor${NORMAL}"
     echo ""
-    /usr/local/bin/brew doctor &&
+    /usr/local/bin/brew doctor;
     echo ""
     echo "${RED}Brew Cask Update${NORMAL}"
     echo ""
-    /usr/local/bin/brew cask update &&
+    /usr/local/bin/brew cask update;
     echo ""
     echo "${BLUE}Brew Cask Cleanup${NORMAL}"
     echo ""
-    /usr/local/bin/brew cask cleanup &&
+    /usr/local/bin/brew cask cleanup;
     echo ""
     echo "${PURPLE}Brew Cask Doctor${NORMAL}"
     echo ""
@@ -65,7 +67,5 @@ This is a simple wrapper script that just auto-runs:
     brew cask doctor
 EOF
 }
-
-trap help_text SIGHUP SIGINT SIGTERM
 
 no_sudo; brew_var
