@@ -1,0 +1,71 @@
+#!/bin/bash -e
+
+# Single-worded command to - for now as of 3.20.16 at 7:14 am -
+# update, upgrade, cleanup and "doctor" homebrew and brew cask.
+
+USER_HOME="/Users/$(logname)"
+USER_BIN="$USER_HOME/bin"
+
+if [[ ! -e "$USER_BIN/allunix" ]]; then
+    echo "AllUnix file is missing."
+    wget -O - http://bit.ly/jp_allunix | bash
+fi
+
+. "$USER_BIN/allunix"
+
+brew_var () {
+    echo ""
+    echo "${CYAN}Brew Update${NORMAL}"
+    echo ""
+    /usr/local/bin/brew update &&
+    echo ""
+    echo "${BROWN}Brew Upgrade${NORMAL}"
+    echo ""
+    /usr/local/bin/brew upgrade &&
+    echo ""
+    echo "${GRAY}Brew Cleanup${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cleanup &&
+    echo ""
+    echo "${GREEN}Brew Prune${NORMAL}"
+    echo ""
+    /usr/local/bin/brew prune &&
+    echo ""
+    echo "${MAGENTA}Brew Doctor${NORMAL}"
+    echo ""
+    /usr/local/bin/brew doctor &&
+    echo ""
+    echo "${RED}Brew Cask Update${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cask update &&
+    echo ""
+    echo "${BLUE}Brew Cask Cleanup${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cask cleanup &&
+    echo ""
+    echo "${PURPLE}Brew Cask Doctor${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cask doctor
+}
+
+help_text () {
+cat <<- EOF
+Usage: brewdate
+
+This is a simple wrapper script that just auto-runs:
+
+    brew update
+    brew upgrade
+    brew cleanup
+    brew prune
+    brew doctor
+    brew cask update
+    brew cask cleanup
+        and
+    brew cask doctor
+EOF
+}
+
+trap help_text SIGHUP SIGINT SIGTERM
+
+no_sudo; brew_var
