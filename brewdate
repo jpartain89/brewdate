@@ -3,6 +3,8 @@
 # Single-worded command to - for now as of 3.20.16 at 7:14 am -
 # update, upgrade, cleanup and "doctor" homebrew and brew cask.
 
+# Now self-installs
+
 # Copyright © 2017 JPCDI, JPartain89 and Justin Partain
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,21 +23,43 @@
 # Program information
 PROGRAM_NAME="brewdate"
 PROGRAM_AUTHOR="Justin Partain"
-PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME@jpcdi.com"
+PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME.admin@jpcdi.com"
 PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
 
-VERSION="2.0"
+VERSION="2.5"
 USER_HOME="/Users/$(logname)"
 USER_BIN="$USER_HOME/bin"
 
+if [[ $(git -C ~/git/brewdate pull 2>&1) != "Already up-to-date." ]]; then
+    ~/git/brewdate/brewdate && exit 0
+fi
 if [[ ! -e "$(which allunix)" ]] && [[ ! -e "$USER_BIN/$PROGRAM_NAME" ]]; then
     echo "AllUnix file is missing."
     wget -O - http://bit.ly/jp_allunix | bash
 fi
 
-. "$USER_BIN/allunix"
-
+source allunix
 no_sudo
+
+if [[ ! -d ~/git/brewdate ]]; then
+    echo "${WARNING}Looks like brewdate's git repo is missing.${NORMAL}"
+    git clone https://github.com/jpartain89/brewdate.git ~/git/brewdate
+fi
+if [[ $(which brewdate) != ~/bin/brewdate ]] && [[ $(which brewdate) != "" ]]; then
+    echo "${WARNING}It looks like brewdate is installed in the wrong spot.${NORMAL}"
+    echo "${WARNING}$(which brewdate)${NORMAL}"
+    echo "${WARNING}Removing from that spot, and placing in correct spot.${NORMAL}"
+    sudo rm "$(which brewdate)"
+fi
+if [[ ! -h ~/bin/brewdate ]]; then
+    echo "${WARNING}It looks like the link for brewdate from ${NORMAL}"
+    echo "${RED}~/git/brewdate/brewdate${NORMAL} to ${RED}~/bin/brewdate${NORMAL}"
+    echo "${WARNING} is missing.${NORMAL} ${BLUE}Fixing.${NORMAL}"
+    git -C ~/git/brewdate pull;
+    sudo ln -fs ~/git/brewdate/brewdate ~/bin/brewdate;
+    sudo chmod -R 0775 ~/bin/brewdate;
+    sudo chown -R jpartain89:staff ~/bin/brewdate
+fi
 
 trap 'exit 0' SIGHUP SIGINT SIGTERM EXIT
 
