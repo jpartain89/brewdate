@@ -78,15 +78,11 @@ brew_var () {
     echo ""
     echo "${GREEN}Brew Prune${NORMAL}"
     echo ""
-    /usr/local/bin/brew prune;
+    /usr/local/bin/brew prune && echo "Completed";
     echo ""
     echo "${MAGENTA}Brew Doctor${NORMAL}"
     echo ""
     /usr/local/bin/brew doctor;
-    echo ""
-    echo "${RED}Brew Cask Update${NORMAL}"
-    echo ""
-    /usr/local/bin/brew cask update;
     echo ""
     echo "${BLUE}Brew Cask Cleanup${NORMAL}"
     echo ""
