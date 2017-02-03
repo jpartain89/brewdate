@@ -25,20 +25,17 @@ PROGRAM_NAME="brewdate"
 PROGRAM_AUTHOR="Justin Partain"
 PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME.admin@jpcdi.com"
 PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
-
 VERSION="2.5"
 USER_HOME="/Users/$(logname)"
 USER_BIN="$USER_HOME/bin"
 
-if [[ $(git -C ~/git/brewdate pull 2>&1) != "Already up-to-date." ]]; then
-    ~/git/brewdate/brewdate && exit 0
-fi
 if [[ ! -e "$(which allunix)" ]] && [[ ! -e "$USER_BIN/$PROGRAM_NAME" ]]; then
     echo "AllUnix file is missing."
     wget -O - http://bit.ly/jp_allunix | bash
 fi
 
 source allunix
+git_updating
 no_sudo
 
 if [[ ! -d ~/git/brewdate ]]; then
