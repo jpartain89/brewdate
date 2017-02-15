@@ -22,7 +22,6 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-PROGRAM_AUTHOR="Justin Partain"
 PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME.admin@jpcdi.com"
 PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
 VERSION="2.5.1"
