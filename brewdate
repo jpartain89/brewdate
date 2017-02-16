@@ -27,6 +27,7 @@ PROGRAM_NAME="brewdate"
 PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME.admin@jpcdi.com"
 PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
 VERSION="2.5.2"
+USERNAME=jpartain89
 
 if [[ ! -e "$(which allunix)" ]]; then
     echo "AllUnix file is missing."
