@@ -24,20 +24,16 @@ trap 'exit 0' SIGHUP SIGINT SIGTERM EXIT
 
 # Program information
 PROGRAM_NAME="brewdate"
-PROGRAM_AUTHOR_CONTACT="$PROGRAM_NAME.admin@jpcdi.com"
-PROGRAM_AUTHOR_FULL="JPCDI, JPartain89 and $PROGRAM_AUTHOR"
-VERSION="2.5.2"
+VERSION="2.5.5"
 USERNAME=jpartain89
 
-if [[ ! -e "$(which allunix)" ]]; then
+if [[ ! -e "$(command -v allunix)" ]]; then
     echo "AllUnix file is missing."
     wget -O - http://bit.ly/jp_allunix | bash
 fi
 
 source allunix &&
-git_cloning &&
-git_updating &&
-homebin_install &&
+git_home_bin_install
 no_sudo &&
 
 brew_var () {
