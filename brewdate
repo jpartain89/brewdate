@@ -33,7 +33,7 @@ if [[ ! -e "$(command -v allunix)" ]]; then
 fi
 
 source allunix &&
-git_home_bin_install
+git_local_bin_install &&
 no_sudo &&
 
 brew_var () {
