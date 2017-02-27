@@ -43,7 +43,8 @@ ${WARNING}Sorry, either encountered an error or a 'stop' signal.
 EOF
 }
 
-trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM EXIT
+trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM
+trap 'exit 0' EXIT
 
 function brew_var() {
   echo "${CYAN}Brew Update${NORMAL}"
@@ -51,13 +52,9 @@ function brew_var() {
   /usr/local/bin/brew update;
   echo ""
   echo "${RED}Brew Upgrade${NORMAL}"
-  echo ""
   /usr/local/bin/brew upgrade;
-  echo ""
   echo "${GRAY}Brew Cleanup${NORMAL}"
-  echo ""
   /usr/local/bin/brew cleanup;
-  echo ""
   echo "${GREEN}Brew Prune${NORMAL}"
   echo ""
   /usr/local/bin/brew prune && echo "Completed";
