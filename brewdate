@@ -52,16 +52,20 @@ function brew_var() {
   /usr/local/bin/brew update;
   echo ""
   echo "${RED}Brew Upgrade${NORMAL}"
-  /usr/local/bin/brew upgrade;
+  echo ""
+  /usr/local/bin/brew upgrade && echo "Completed/Nothing to do"
+  echo ""
   echo "${GRAY}Brew Cleanup${NORMAL}"
-  /usr/local/bin/brew cleanup;
+  echo ""
+  /usr/local/bin/brew cleanup && echo "Completed/Nothing to do"
+  echo ""
   echo "${GREEN}Brew Prune${NORMAL}"
   echo ""
-  /usr/local/bin/brew prune && echo "Completed";
+  /usr/local/bin/brew prune && echo "Completed/Nothing to do"
   echo ""
   echo "${MAGENTA}Brew Doctor${NORMAL}"
   echo ""
-  /usr/local/bin/brew doctor;
+  /usr/local/bin/brew doctor
   echo ""
   echo "${BLUE}Brew Cask Cleanup${NORMAL}"
   echo ""
@@ -90,12 +94,20 @@ This is a simple wrapper script that just auto-runs:
 EOF
 }
 
-while [ "$#" -ge 1 ]; do
+while [ $# -ge 1 ]; do
   case "$1" in
-    -h | --help ) help_text; exit 0;;
-    -V | --version ) HELP_VERSION; exit 0;;
-    -C | --copyright ) COPYRIGHT; exit 0;;
-    * ) ERROR; exit 1;;
+    -h | --help )
+      help_text; exit 0
+    ;;
+    -V | --version )
+      HELP_VERSION; exit 0
+    ;;
+    -C | --copyright )
+      COPYRIGHT; exit 0
+    ;;
+    * )
+      ERROR; exit 1
+    ;;
   esac
 done
 brew_var; EXIT_NORM
