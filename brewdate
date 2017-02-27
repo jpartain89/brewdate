@@ -20,53 +20,62 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-trap 'exit 0' SIGHUP SIGINT SIGTERM EXIT
-
 # Program information
 PROGRAM_NAME="brewdate"
 VERSION="2.5.5"
 USERNAME=jpartain89
 
 if [[ ! -e "$(command -v allunix)" ]]; then
-    echo "AllUnix file is missing."
-    wget -O - http://bit.ly/jp_allunix | bash
+  echo "AllUnix file is missing."
+  wget -O - http://bit.ly/jp_allunix | bash
 fi
 
 source allunix &&
 git_local_bin_install &&
 no_sudo &&
 
-brew_var () {
-    echo "${CYAN}Brew Update${NORMAL}"
-    echo ""
-    /usr/local/bin/brew update;
-    echo ""
-    echo "${BROWN}Brew Upgrade${NORMAL}"
-    echo ""
-    /usr/local/bin/brew upgrade;
-    echo ""
-    echo "${GRAY}Brew Cleanup${NORMAL}"
-    echo ""
-    /usr/local/bin/brew cleanup;
-    echo ""
-    echo "${GREEN}Brew Prune${NORMAL}"
-    echo ""
-    /usr/local/bin/brew prune && echo "Completed";
-    echo ""
-    echo "${MAGENTA}Brew Doctor${NORMAL}"
-    echo ""
-    /usr/local/bin/brew doctor;
-    echo ""
-    echo "${BLUE}Brew Cask Cleanup${NORMAL}"
-    echo ""
-    /usr/local/bin/brew cask cleanup;
-    echo ""
-    echo "${PURPLE}Brew Cask Doctor${NORMAL}"
-    echo ""
-    /usr/local/bin/brew cask doctor
+function ERROR() {
+cat << EOF
+${WARNING}Sorry, either encountered an error or a 'stop' signal.
+    Also, only -h, --help, -V, --version, -C and --copyright
+    are the allowed command line flags.
+  Now exiting.${NORMAL}
+EOF
 }
 
-help_text () {
+trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM EXIT
+
+function brew_var() {
+  echo "${CYAN}Brew Update${NORMAL}"
+  echo ""
+  /usr/local/bin/brew update;
+  echo ""
+  echo "${RED}Brew Upgrade${NORMAL}"
+  echo ""
+  /usr/local/bin/brew upgrade;
+  echo ""
+  echo "${GRAY}Brew Cleanup${NORMAL}"
+  echo ""
+  /usr/local/bin/brew cleanup;
+  echo ""
+  echo "${GREEN}Brew Prune${NORMAL}"
+  echo ""
+  /usr/local/bin/brew prune && echo "Completed";
+  echo ""
+  echo "${MAGENTA}Brew Doctor${NORMAL}"
+  echo ""
+  /usr/local/bin/brew doctor;
+  echo ""
+  echo "${BLUE}Brew Cask Cleanup${NORMAL}"
+  echo ""
+  /usr/local/bin/brew cask cleanup;
+  echo ""
+  echo "${PURPLE}Brew Cask Doctor${NORMAL}"
+  echo ""
+  /usr/local/bin/brew cask doctor
+}
+
+function help_text() {
 cat <<- EOF
 Usage: brewdate
 
@@ -84,19 +93,12 @@ This is a simple wrapper script that just auto-runs:
 EOF
 }
 
-ERROR () {
-    echo "${WARNING}Sorry, either encountered an error or a 'stop' signal.
-    Also, only -h, --help, -V, --version, -C and --copyright
-    are the allowed command line flags.
-    Now exiting.${NORMAL}"
-}
-
 while [ "$#" -ge 1 ]; do
-    case "$1" in
-        -h | --help ) help_text; exit 0;;
-        -V | --version ) HELP_VERSION; exit 0;;
-        -C | --copyright ) COPYRIGHT; exit 0;;
-        * ) ERROR; exit 1;;
-    esac
+  case "$1" in
+    -h | --help ) help_text; exit 0;;
+    -V | --version ) HELP_VERSION; exit 0;;
+    -C | --copyright ) COPYRIGHT; exit 0;;
+    * ) ERROR; exit 1;;
+  esac
 done
 brew_var; EXIT_NORM
