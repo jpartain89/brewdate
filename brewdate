@@ -22,7 +22,7 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-VERSION="2.5.5"
+VERSION="2.8.0"
 USERNAME=jpartain89
 
 if [[ ! -e "$(command -v allunix)" ]]; then
