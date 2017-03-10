@@ -23,7 +23,7 @@
 # Program information
 PROGRAM_NAME="brewdate"
 VERSION="2.8.0"
-USERNAME=jpartain89
+USERNAME="jpartain89"
 
 if [[ ! -e "$(command -v allunix)" ]]; then
   echo "AllUnix file is missing."
@@ -34,7 +34,7 @@ source allunix &&
 git_local_bin_install &&
 no_sudo &&
 
-function ERROR() {
+function ERROR {
 cat << EOF
 ${WARNING}Sorry, either encountered an error or a 'stop' signal.
     Also, only -h, --help, -V, --version, -C and --copyright
@@ -46,7 +46,7 @@ EOF
 trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM
 trap 'exit 0' EXIT
 
-function brew_var() {
+function brew_var {
   echo "${CYAN}Brew Update${NORMAL}"
   echo ""
   /usr/local/bin/brew update;
@@ -76,8 +76,8 @@ function brew_var() {
   /usr/local/bin/brew cask doctor
 }
 
-function help_text() {
-cat <<- EOF
+function help_text {
+cat << EOF
 Usage: brewdate
 
 This is a simple wrapper script that just auto-runs:
