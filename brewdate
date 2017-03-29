@@ -22,7 +22,7 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-VERSION="2.8.0"
+VERSION="2.8.1"
 USERNAME="jpartain89"
 
 if [[ ! -e "$(command -v allunix)" ]]; then
@@ -30,15 +30,14 @@ if [[ ! -e "$(command -v allunix)" ]]; then
   wget -O - http://bit.ly/jp_allunix | bash
 fi
 
-source allunix &&
+. allunix &&
 git_local_bin_install &&
 no_sudo &&
 
 function ERROR {
 cat << EOF
-${WARNING}Sorry, either encountered an error or a 'stop' signal.
-    Also, only -h, --help, -V, --version, -C and --copyright
-    are the allowed command line flags.
+${WARNING}Sorry, it seems we have caught some sort of error, or you
+sent a 'kill' command to ${PROGRAM_NAME}.
   Now exiting.${NORMAL}
 EOF
 }
@@ -47,6 +46,7 @@ trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM
 trap 'exit 0' EXIT
 
 function brew_var {
+  echo ""
   echo "${CYAN}Brew Update${NORMAL}"
   echo ""
   /usr/local/bin/brew update;
@@ -65,7 +65,7 @@ function brew_var {
   echo ""
   echo "${MAGENTA}Brew Doctor${NORMAL}"
   echo ""
-  /usr/local/bin/brew doctor
+  /usr/local/bin/brew doctor;
   echo ""
   echo "${BLUE}Brew Cask Cleanup${NORMAL}"
   echo ""
@@ -76,9 +76,21 @@ function brew_var {
   /usr/local/bin/brew cask doctor
 }
 
+function brew_quiet {
+  exec &> >( &> "${HOME}/log/brewdate.log" 2>&1 )
+  /usr/local/bin/brew update;
+  /usr/local/bin/brew upgrade;
+  /usr/local/bin/brew cleanup;
+  /usr/local/bin/brew prune;
+  /usr/local/bin/brew doctor;
+  /usr/local/bin/brew cask cleanup;
+  /usr/local/bin/brew cask doctor;
+}
+
 function help_text {
 cat << EOF
 Usage: brewdate
+[ -h, --help | -V, --version | -q, --quiet ]
 
 This is a simple wrapper script that just auto-runs:
 
@@ -91,6 +103,8 @@ This is a simple wrapper script that just auto-runs:
     brew cask cleanup
         and
     brew cask doctor
+
+The -q and --quiet options attempt to silence ALL output into a log file.
 EOF
 }
 
@@ -102,12 +116,13 @@ while [ $# -ge 1 ]; do
     -V | --version )
       HELP_VERSION; exit 0
     ;;
-    -C | --copyright )
-      COPYRIGHT; exit 0
+    -q | --quiet )
+      brew_quiet; exit 0
     ;;
     * )
       ERROR; exit 1
     ;;
   esac
 done
+
 brew_var; EXIT_NORM
