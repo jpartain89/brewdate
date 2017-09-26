@@ -22,12 +22,15 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-VERSION="2.8.1"
+VERSION="2.8.2"
 USERNAME="jpartain89"
 
+-e /usr/libexec/path_helper >/dev/null 2>&1 && \
+/usr/libexec/path_helper >/dev/null 2>&1
+
 if [[ ! -e "$(command -v allunix)" ]]; then
-  echo "AllUnix file is missing."
-  wget -O - http://bit.ly/jp_allunix | bash
+    echo "AllUnix file is missing."
+    wget -O - http://bit.ly/jp_allunix | bash
 fi
 
 . allunix &&
@@ -36,9 +39,9 @@ no_sudo &&
 
 function ERROR {
 cat << EOF
-${WARNING}Sorry, it seems we have caught some sort of error, or you
-sent a 'kill' command to ${PROGRAM_NAME}.
-  Now exiting.${NORMAL}
+${WARNING}Sorry, it seems we have caught some sort of error, or you${NORMAL}
+${WARNING}sent a 'kill' command to ${PROGRAM_NAME}.${NORMAL}
+${WARNING}  Now exiting.${NORMAL}
 EOF
 }
 
@@ -46,45 +49,45 @@ trap 'ERROR; exit $?' SIGHUP SIGINT SIGTERM
 trap 'exit 0' EXIT
 
 function brew_var {
-  echo ""
-  echo "${CYAN}Brew Update${NORMAL}"
-  echo ""
-  /usr/local/bin/brew update;
-  echo ""
-  echo "${RED}Brew Upgrade${NORMAL}"
-  echo ""
-  /usr/local/bin/brew upgrade && echo "Completed/Nothing to do"
-  echo ""
-  echo "${GRAY}Brew Cleanup${NORMAL}"
-  echo ""
-  /usr/local/bin/brew cleanup && echo "Completed/Nothing to do"
-  echo ""
-  echo "${GREEN}Brew Prune${NORMAL}"
-  echo ""
-  /usr/local/bin/brew prune && echo "Completed/Nothing to do"
-  echo ""
-  echo "${MAGENTA}Brew Doctor${NORMAL}"
-  echo ""
-  /usr/local/bin/brew doctor;
-  echo ""
-  echo "${BLUE}Brew Cask Cleanup${NORMAL}"
-  echo ""
-  /usr/local/bin/brew cask cleanup;
-  echo ""
-  echo "${PURPLE}Brew Cask Doctor${NORMAL}"
-  echo ""
-  /usr/local/bin/brew cask doctor
+    echo ""
+    echo "${CYAN}Brew Update${NORMAL}"
+    echo ""
+    /usr/local/bin/brew update;
+    echo ""
+    echo "${RED}Brew Upgrade${NORMAL}"
+    echo ""
+    /usr/local/bin/brew upgrade && echo "Completed/Nothing to do"
+    echo ""
+    echo "${GRAY}Brew Cleanup${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cleanup && echo "Completed/Nothing to do"
+    echo ""
+    echo "${GREEN}Brew Prune${NORMAL}"
+    echo ""
+    /usr/local/bin/brew prune && echo "Completed/Nothing to do"
+    echo ""
+    echo "${MAGENTA}Brew Doctor${NORMAL}"
+    echo ""
+    /usr/local/bin/brew doctor;
+    echo ""
+    echo "${BLUE}Brew Cask Cleanup${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cask cleanup;
+    echo ""
+    echo "${PURPLE}Brew Cask Doctor${NORMAL}"
+    echo ""
+    /usr/local/bin/brew cask doctor
 }
 
 function brew_quiet {
-  exec &> >( &> "${HOME}/log/brewdate.log" 2>&1 )
-  /usr/local/bin/brew update;
-  /usr/local/bin/brew upgrade;
-  /usr/local/bin/brew cleanup;
-  /usr/local/bin/brew prune;
-  /usr/local/bin/brew doctor;
-  /usr/local/bin/brew cask cleanup;
-  /usr/local/bin/brew cask doctor;
+    exec &> >( &> "${HOME}/log/brewdate.log" 2>&1 )
+    /usr/local/bin/brew update;
+    /usr/local/bin/brew upgrade;
+    /usr/local/bin/brew cleanup;
+    /usr/local/bin/brew prune;
+    /usr/local/bin/brew doctor;
+    /usr/local/bin/brew cask cleanup;
+    /usr/local/bin/brew cask doctor;
 }
 
 function help_text {
@@ -109,20 +112,20 @@ EOF
 }
 
 while [ $# -ge 1 ]; do
-  case "$1" in
-    -h | --help )
-      help_text; exit 0
-    ;;
-    -V | --version )
-      HELP_VERSION; exit 0
-    ;;
-    -q | --quiet )
-      brew_quiet; exit 0
-    ;;
-    * )
-      ERROR; exit 1
-    ;;
-  esac
+    case "$1" in
+        -h | --help )
+            help_text; exit 0
+        ;;
+        -V | --version )
+            HELP_VERSION; exit 0
+        ;;
+        -q | --quiet )
+            brew_quiet; exit 0
+        ;;
+        * )
+            ERROR; exit 1
+        ;;
+    esac
 done
 
 brew_var; EXIT_NORM
