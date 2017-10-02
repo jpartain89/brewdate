@@ -23,7 +23,6 @@
 # Program information
 PROGRAM_NAME="brewdate"
 VERSION="2.8.2"
-USERNAME="jpartain89"
 
 -e /usr/libexec/path_helper >/dev/null 2>&1 && \
 /usr/libexec/path_helper >/dev/null 2>&1
