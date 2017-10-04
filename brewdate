@@ -22,8 +22,7 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-VERSION="2.8.2"
-USERNAME="jpartain89"
+VERSION="2.8.3"
 
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar"
 
@@ -32,7 +31,7 @@ if [[ ! -e "$(command -v allunix)" ]]; then
     wget -O - http://bit.ly/jp_allunix | bash
 fi
 
-. allunix &&
+. "$(command -v allunix)" &&
 git_local_bin_install &&
 no_sudo &&
 
