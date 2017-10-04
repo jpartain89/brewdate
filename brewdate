@@ -25,8 +25,7 @@ PROGRAM_NAME="brewdate"
 VERSION="2.8.2"
 USERNAME="jpartain89"
 
--e /usr/libexec/path_helper >/dev/null 2>&1 && \
-/usr/libexec/path_helper >/dev/null 2>&1
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar"
 
 if [[ ! -e "$(command -v allunix)" ]]; then
     echo "AllUnix file is missing."
