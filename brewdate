@@ -84,7 +84,8 @@ function brew_quiet {
     /usr/local/bin/brew prune;
     /usr/local/bin/brew doctor;
     /usr/local/bin/brew cask cleanup;
-    /usr/local/bin/brew cask doctor } >>"${HOME}/Library/Logs/brewdate.log" 2>&1
+    /usr/local/bin/brew cask doctor;
+        } >>"${HOME}/Library/Logs/brewdate.log" 2>&1
 }
 
 function help_text {
