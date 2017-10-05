@@ -78,7 +78,7 @@ function brew_var {
 }
 
 function brew_quiet {
-    exec &> >( &> "${HOME}/log/brewdate.log" 2>&1 )
+    exec &> >( &> "${HOME}/Library/Logs/brewdate.log" 2>&1 )
     /usr/local/bin/brew update;
     /usr/local/bin/brew upgrade;
     /usr/local/bin/brew cleanup;
