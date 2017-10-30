@@ -24,16 +24,24 @@
 PROGRAM_NAME="brewdate"
 VERSION="2.8.3"
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar"
 
-if [[ ! -e "$(command -v allunix)" ]]; then
-    echo "AllUnix file is missing."
-    wget -O - http://bit.ly/jp_allunix | bash
+if [[ ! -e "/usr/local/bin/${PROGRAM_NAME}" ]]; then
+    echo "Looks like $PROGRAM_NAME doesn't have an installed link at "
+    echo "/usr/local/bin"
+    echo "Attempting to link now."
+    sudo ln -svf "${DIR}/${PROGRAM_NAME}" "/usr/local/bin/${PROGRAM_NAME}"
 fi
 
-. "$(command -v allunix)"
-git_local_bin_install
-no_sudo
+if [[ $EUID == 0 ]]; then
+    echo ""
+    echo "Sorry, you can't use sudo in this script. "
+    echo "Press enter to exit."
+    press_enter
+    exit 1
+fi
 
 function onError() {
     status=$?
@@ -61,7 +69,7 @@ EOF
 
 trap 'onError $LINENO "$@"' ERR
 
-function brew_var {
+function brew_var() {
     echo ""
     echo "Brew Update"
     echo ""
@@ -92,7 +100,7 @@ function brew_var {
     /usr/local/bin/brew cask doctor
 }
 
-function brew_quiet {
+function brew_quiet() {
     { /usr/local/bin/brew update;
     /usr/local/bin/brew upgrade;
     /usr/local/bin/brew cleanup;
@@ -103,10 +111,10 @@ function brew_quiet {
         } >>"${HOME}/Library/Logs/brewdate.log" 2>&1
 }
 
-function help_text {
+function help_text() {
 cat << EOF
 Usage: brewdate
-[ -h, --help | -V, --version | -q, --quiet ]
+[ -h, --help | -q, --quiet ]
 
 This is a simple wrapper script that just auto-runs:
 
@@ -129,14 +137,11 @@ if [ $# -ge 1 ]; then
         case "$1" in
             -h | --help )
                 help_text; exit 0;;
-            -V | --version )
-                HELP_VERSION; exit 0;;
             -q | --quiet )
                 brew_quiet; exit 0;;
-            * )
-                help_text; exit 1;;
+            * ) help_text; exit 1;;
         esac
     done
 else
-    brew_var; EXIT_NORM
+    brew_var
 fi
