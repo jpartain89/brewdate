@@ -5,7 +5,7 @@
 
 # Now self-installs
 
-# Copyright © 2017 JPCDI, JPartain89 and Justin Partain
+# Copyright © 2017, 2018 JPCDI, JPartain89 and Justin Partain
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,18 +22,25 @@
 
 # Program information
 PROGRAM_NAME="brewdate"
-VERSION="2.8.3"
+VERSION="3.0.0"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar"
 
-if [[ ! -e "/usr/local/bin/${PROGRAM_NAME}" ]]; then
-    echo "Looks like $PROGRAM_NAME doesn't have an installed link at "
-    echo "/usr/local/bin"
-    echo "Attempting to link now."
-    sudo ln -svf "${DIR}/${PROGRAM_NAME}" "/usr/local/bin/${PROGRAM_NAME}"
-fi
+# This "auto-installs" git-auto into /usr/local/bin for ya!
+command -v "$PROGRAM_NAME" 1>/dev/null 2>&1 || {
+    (
+        if [ -x "${DIR}/${PROGRAM_NAME}" ]; then
+            sudo ln -svf "${DIR}/${PROGRAM_NAME}" "/usr/local/bin/${PROGRAM_NAME}"
+            sudo chmod -R 0775 "/usr/local/bin/${PROGRAM_NAME}"
+        else
+            echo "For some reason, linking $PROGRAM_NAME to /usr/local/bin,"
+            echo "failed. My apologies for not being able to figure it out..."
+            exit 1
+        fi
+    )
+}
 
 if [[ $EUID == 0 ]]; then
     echo ""
@@ -91,10 +98,6 @@ function brew_var() {
     echo ""
     /usr/local/bin/brew doctor;
     echo ""
-    echo "Brew Cask Cleanup"
-    echo ""
-    /usr/local/bin/brew cask cleanup;
-    echo ""
     echo "Brew Cask Doctor"
     echo ""
     /usr/local/bin/brew cask doctor
@@ -124,7 +127,6 @@ This is a simple wrapper script that just auto-runs:
     brew prune
     brew doctor
     brew cask update
-    brew cask cleanup
         and
     brew cask doctor
 
