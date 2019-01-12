@@ -90,10 +90,6 @@ function brew_var() {
     echo ""
     /usr/local/bin/brew cleanup && echo "Completed/Nothing to do"
     echo ""
-    echo "Brew Prune"
-    echo ""
-    /usr/local/bin/brew prune && echo "Completed/Nothing to do"
-    echo ""
     echo "Brew Doctor"
     echo ""
     /usr/local/bin/brew doctor;
