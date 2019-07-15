@@ -26,7 +26,7 @@ VERSION="3.0.0"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar"
+BREW="$(command -v brew)"
 
 # This "auto-installs" the program into /usr/local/bin for ya!
 command -v "$PROGRAM_NAME" 1>/dev/null 2>&1 || {
@@ -80,40 +80,29 @@ function brew_var() {
     echo ""
     echo "Brew Update"
     echo ""
-    /usr/local/bin/brew update;
+    "${BREW}" update;
     echo ""
     echo "Brew Upgrade"
     echo ""
-    /usr/local/bin/brew upgrade && echo "Completed/Nothing to do"
+    "${BREW}" upgrade && echo "Completed/Nothing to do"
     echo ""
     echo "Brew Cleanup"
     echo ""
-    /usr/local/bin/brew cleanup && echo "Completed/Nothing to do"
+    "${BREW}" cleanup && echo "Completed/Nothing to do"
     echo ""
     echo "Brew Doctor"
     echo ""
-    /usr/local/bin/brew doctor;
+    "${BREW}" doctor;
     echo ""
     echo "Brew Cask Doctor"
     echo ""
-    /usr/local/bin/brew cask doctor
-}
-
-function brew_quiet() {
-    { /usr/local/bin/brew update;
-    /usr/local/bin/brew upgrade;
-    /usr/local/bin/brew cleanup;
-    /usr/local/bin/brew prune;
-    /usr/local/bin/brew doctor;
-    /usr/local/bin/brew cask cleanup;
-    /usr/local/bin/brew cask doctor;
-        } >>"${HOME}/Library/Logs/brewdate.log" 2>&1
+    "${BREW}" cask doctor
 }
 
 function help_text() {
 cat << EOF
 Usage: brewdate
-[ -h, --help | -q, --quiet ]
+[ -h, --help ]
 
 This is a simple wrapper script that just auto-runs:
 
@@ -125,8 +114,6 @@ This is a simple wrapper script that just auto-runs:
     brew cask update
         and
     brew cask doctor
-
-The -q and --quiet options attempt to silence ALL output into a log file.
 EOF
 }
 
@@ -135,8 +122,6 @@ if [ $# -ge 1 ]; then
         case "$1" in
             -h | --help )
                 help_text; exit 0;;
-            -q | --quiet )
-                brew_quiet; exit 0;;
             * ) help_text; exit 1;;
         esac
     done
